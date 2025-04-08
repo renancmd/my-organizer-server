@@ -4,10 +4,7 @@ import dev.renancmd.MyOrganizer.dto.LoginDTO;
 import dev.renancmd.MyOrganizer.dto.RegisterDTO;
 import dev.renancmd.MyOrganizer.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,4 +32,10 @@ public class UserController {
     public String login(@RequestBody LoginDTO loginDTO) {
         return authService.login(loginDTO);
     }
+
+    @GetMapping("/me")
+    public String me() {
+        return "Hello World";
+    }
+
 }
