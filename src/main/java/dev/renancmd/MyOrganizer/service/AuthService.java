@@ -4,6 +4,7 @@ import dev.renancmd.MyOrganizer.dto.LoginDTO;
 import dev.renancmd.MyOrganizer.dto.RegisterDTO;
 import dev.renancmd.MyOrganizer.model.User;
 import dev.renancmd.MyOrganizer.repository.UserRepository;
+import dev.renancmd.MyOrganizer.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public String register(RegisterDTO dto) {
         // Verify if email already exists
@@ -37,7 +39,7 @@ public class AuthService {
         // Finds user by email, checks if password matches; if valid, returns success message, otherwise returns invalid credentials.
         return userRepository.findByEmail(dto.getEmail())
                 .filter(user -> passwordEncoder.matches(dto.getPassword(), user.getPassword()))
-                .map(user -> "Login successful")
+                .map(user -> jwtUtil.generateToken(user.getEmail()))
                 .orElse("Login failed");
     }
 }
