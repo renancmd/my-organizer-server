@@ -64,4 +64,38 @@ public class TaskService {
         taskRepository.save(task);
     }
 
+    public void deleteTask(String email, Long taskId) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        if (!task.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("User doesn't belong to this task");
+        }
+
+        taskRepository.delete(task);
+    }
+
+    public TaskResponseDTO getTaskById(String email, Long taskId) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task não encontrada."));
+
+        if (!task.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Você não tem permissão para ver essa tarefa.");
+        }
+
+        return TaskResponseDTO.builder()
+                .id(task.getId())
+                .name(task.getName())
+                .description(task.getDescription())
+                .date(task.getDate())
+                .build();
+    }
+
+
 }

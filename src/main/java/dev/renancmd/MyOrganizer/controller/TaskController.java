@@ -2,7 +2,6 @@ package dev.renancmd.MyOrganizer.controller;
 
 import dev.renancmd.MyOrganizer.dto.TaskRequestDTO;
 import dev.renancmd.MyOrganizer.dto.TaskResponseDTO;
-import dev.renancmd.MyOrganizer.model.User;
 import dev.renancmd.MyOrganizer.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +39,26 @@ public class TaskController {
     ) {
         String email = authentication.getName();
         taskService.updateTask(email, id, dto);
-        return ResponseEntity.ok("Task atualizada com sucesso!");
+        return ResponseEntity.ok("Task updated successfully!");
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTask(@PathVariable Long id, Authentication authentication) {
+        String email = authentication.getName();
+        taskService.deleteTask(email, id);
+        return ResponseEntity.ok("Task deleted successfully!");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> getTaskById(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+        TaskResponseDTO task = taskService.getTaskById(email, id);
+        return ResponseEntity.ok(task);
+    }
+
 
 
 }
