@@ -63,7 +63,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 user.ifPresent(u -> {
                     // Create an authentication token (no credentials or authorities here)
                     var authToken = new UsernamePasswordAuthenticationToken(
-                            u, null, null);
+                            email, null, null);
 
                     // Add details of the request (IP, session, etc.)
                     authToken.setDetails(
