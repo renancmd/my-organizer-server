@@ -22,6 +22,9 @@ public class Task {
     private Long id;
 
     @Column(nullable = false)
+    private boolean done = false;
+
+    @Column(nullable = false)
     private String name;
 
     private String description;

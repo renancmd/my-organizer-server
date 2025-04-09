@@ -2,6 +2,7 @@ package dev.renancmd.MyOrganizer.controller;
 
 import dev.renancmd.MyOrganizer.dto.TaskRequestDTO;
 import dev.renancmd.MyOrganizer.dto.TaskResponseDTO;
+import dev.renancmd.MyOrganizer.dto.UpdateTaskStatusDTO;
 import dev.renancmd.MyOrganizer.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,16 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @PutMapping("/{id}/done")
+    public ResponseEntity<String> updateTaskStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateTaskStatusDTO dto,
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+        taskService.updateTaskStatus(email, id, dto.isDone());
+        return ResponseEntity.ok("Status da task atualizado com sucesso!");
+    }
 
 
 }

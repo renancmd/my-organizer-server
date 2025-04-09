@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Builder
 public class TaskResponseDTO {
     private Long id;
+    private boolean done;
     private String name;
     private String description;
     private LocalDate date;

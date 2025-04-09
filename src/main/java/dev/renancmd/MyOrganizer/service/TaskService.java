@@ -39,6 +39,7 @@ public class TaskService {
                 .stream()
                 .map(task -> TaskResponseDTO.builder()
                         .id(task.getId())
+                        .done(task.isDone())
                         .name(task.getName())
                         .description(task.getDescription())
                         .date(task.getDate())
@@ -96,6 +97,22 @@ public class TaskService {
                 .date(task.getDate())
                 .build();
     }
+
+    public void updateTaskStatus(String email, Long taskId, boolean done) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task não encontrada."));
+
+        if (!task.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Você não tem permissão para alterar essa tarefa.");
+        }
+
+        task.setDone(done);
+        taskRepository.save(task);
+    }
+
 
 
 }
