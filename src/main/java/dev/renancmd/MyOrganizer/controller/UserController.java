@@ -1,41 +1,21 @@
 package dev.renancmd.MyOrganizer.controller;
 
-import dev.renancmd.MyOrganizer.dto.*;
+import dev.renancmd.MyOrganizer.dto.ChangePasswordDTO;
+import dev.renancmd.MyOrganizer.dto.DeleteUserDTO;
+import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
 import dev.renancmd.MyOrganizer.model.User;
 import dev.renancmd.MyOrganizer.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final AuthService authService;
-
-    public UserController(AuthService authService) {
-        this.authService = authService;
-    }
-
-    @PostMapping("/register") // Map the endpoint /auth/register
-    public String register(@RequestBody RegisterDTO registerDTO) { // Receive the JSON request
-        // and convert automatically to a java object (RegisterDTO)
-        return authService.register(registerDTO); // Service that calls the method register to
-        // data process | OBS: What is a DTO (line 26 to 30)?
-    }
-
-//    A simple object used to transport data between the request and the back-end.
-//
-//    It is not a JPA entity — it does not go directly to the database.
-//
-//    It serves as an intermediate layer of security and organization.
-
-
-    @PostMapping("/login")
-    // Receive the data and call login method from service
-    public String login(@RequestBody LoginDTO loginDTO) {
-        return authService.login(loginDTO);
-    }
 
     @GetMapping("/me")
     public String me() {
@@ -66,5 +46,4 @@ public class UserController {
         authService.deleteUser(email, dto);
         return ResponseEntity.ok("User deleted successfully");
     }
-
 }
