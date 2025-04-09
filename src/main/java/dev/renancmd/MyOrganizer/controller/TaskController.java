@@ -32,5 +32,17 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateTask(
+            @PathVariable Long id,
+            @RequestBody TaskRequestDTO dto,
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+        taskService.updateTask(email, id, dto);
+        return ResponseEntity.ok("Task atualizada com sucesso!");
+    }
+
+
 }
 

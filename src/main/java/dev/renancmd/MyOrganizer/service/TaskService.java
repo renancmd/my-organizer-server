@@ -46,4 +46,22 @@ public class TaskService {
                 .toList();
     }
 
+    public void updateTask(String email, Long taskId, TaskRequestDTO dto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        if (!task.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("User doesn't belong to this task");
+        }
+
+        task.setName(dto.getName());
+        task.setDescription(dto.getDescription());
+        task.setDate(dto.getDate());
+
+        taskRepository.save(task);
+    }
+
 }
