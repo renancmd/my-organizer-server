@@ -4,7 +4,7 @@ import dev.renancmd.MyOrganizer.dto.ChangePasswordDTO;
 import dev.renancmd.MyOrganizer.dto.DeleteUserDTO;
 import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
 import dev.renancmd.MyOrganizer.model.User;
-import dev.renancmd.MyOrganizer.service.AuthService;
+import dev.renancmd.MyOrganizer.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final AuthService authService;
+    private final UserService userService;
 
     @GetMapping("/me")
     public String me() {
@@ -26,7 +26,7 @@ public class UserController {
     public ResponseEntity<String> updateUser(@RequestBody UpdateUserDTO dto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         String email = user.getEmail();
-        authService.updateUser(email, dto);
+        userService.updateUser(email, dto);
         return ResponseEntity.ok("User updated successfully");
     }
 
@@ -34,7 +34,7 @@ public class UserController {
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDTO dto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         String email = user.getEmail();
-        authService.changePassword(email, dto);
+        userService.changePassword(email, dto);
         return ResponseEntity.ok("Password changed successfully");
     }
 
@@ -43,7 +43,7 @@ public class UserController {
         System.out.print("Req got it");
         User user = (User) authentication.getPrincipal();
         String email = user.getEmail();
-        authService.deleteUser(email, dto);
+        userService.deleteUser(email, dto);
         return ResponseEntity.ok("User deleted successfully");
     }
 }
