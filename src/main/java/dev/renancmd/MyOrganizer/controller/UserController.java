@@ -1,9 +1,6 @@
 package dev.renancmd.MyOrganizer.controller;
 
-import dev.renancmd.MyOrganizer.dto.ChangePasswordDTO;
-import dev.renancmd.MyOrganizer.dto.LoginDTO;
-import dev.renancmd.MyOrganizer.dto.RegisterDTO;
-import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
+import dev.renancmd.MyOrganizer.dto.*;
 import dev.renancmd.MyOrganizer.model.User;
 import dev.renancmd.MyOrganizer.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +56,15 @@ public class UserController {
         String email = user.getEmail();
         authService.changePassword(email, dto);
         return ResponseEntity.ok("Password changed successfully");
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestBody DeleteUserDTO dto, Authentication authentication) {
+        System.out.print("Req got it");
+        User user = (User) authentication.getPrincipal();
+        String email = user.getEmail();
+        authService.deleteUser(email, dto);
+        return ResponseEntity.ok("User deleted successfully");
     }
 
 }

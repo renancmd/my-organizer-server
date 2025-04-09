@@ -1,9 +1,6 @@
 package dev.renancmd.MyOrganizer.service;
 
-import dev.renancmd.MyOrganizer.dto.ChangePasswordDTO;
-import dev.renancmd.MyOrganizer.dto.LoginDTO;
-import dev.renancmd.MyOrganizer.dto.RegisterDTO;
-import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
+import dev.renancmd.MyOrganizer.dto.*;
 import dev.renancmd.MyOrganizer.model.User;
 import dev.renancmd.MyOrganizer.repository.UserRepository;
 import dev.renancmd.MyOrganizer.security.JwtUtil;
@@ -76,6 +73,23 @@ public class AuthService {
 
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
+    }
+
+    public void deleteUser(String email, DeleteUserDTO dto) {
+        var userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        User user = userOptional.get();
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+
+        userRepository.delete(user);
+
     }
 
 }
