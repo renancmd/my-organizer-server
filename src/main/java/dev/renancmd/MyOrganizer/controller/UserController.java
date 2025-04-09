@@ -1,5 +1,6 @@
 package dev.renancmd.MyOrganizer.controller;
 
+import dev.renancmd.MyOrganizer.dto.ChangePasswordDTO;
 import dev.renancmd.MyOrganizer.dto.LoginDTO;
 import dev.renancmd.MyOrganizer.dto.RegisterDTO;
 import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
@@ -50,6 +51,14 @@ public class UserController {
         String email = user.getEmail();
         authService.updateUser(email, dto);
         return ResponseEntity.ok("User updated successfully");
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDTO dto, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        String email = user.getEmail();
+        authService.changePassword(email, dto);
+        return ResponseEntity.ok("Password changed successfully");
     }
 
 }

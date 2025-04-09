@@ -1,5 +1,6 @@
 package dev.renancmd.MyOrganizer.service;
 
+import dev.renancmd.MyOrganizer.dto.ChangePasswordDTO;
 import dev.renancmd.MyOrganizer.dto.LoginDTO;
 import dev.renancmd.MyOrganizer.dto.RegisterDTO;
 import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
@@ -59,4 +60,22 @@ public class AuthService {
 
         userRepository.save(user);
     }
+
+    public void changePassword(String email, ChangePasswordDTO dto) {
+        var userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        User user = userOptional.get();
+
+        if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Old password does not match");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepository.save(user);
+    }
+
 }
