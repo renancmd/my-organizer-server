@@ -2,16 +2,22 @@ package dev.renancmd.MyOrganizer.controller;
 
 import dev.renancmd.MyOrganizer.dto.LoginDTO;
 import dev.renancmd.MyOrganizer.dto.RegisterDTO;
+import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
+import dev.renancmd.MyOrganizer.model.User;
 import dev.renancmd.MyOrganizer.service.AuthService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 public class UserController {
 
     private final AuthService authService;
+
+    public UserController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/register") // Map the endpoint /auth/register
     public String register(@RequestBody RegisterDTO registerDTO) { // Receive the JSON request
@@ -36,6 +42,14 @@ public class UserController {
     @GetMapping("/me")
     public String me() {
         return "Hello World";
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody UpdateUserDTO dto, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        String email = user.getEmail();
+        authService.updateUser(email, dto);
+        return ResponseEntity.ok("User updated successfully");
     }
 
 }
