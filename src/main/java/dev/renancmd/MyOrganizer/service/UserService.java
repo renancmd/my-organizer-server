@@ -1,5 +1,6 @@
 package dev.renancmd.MyOrganizer.service;
 
+import dev.renancmd.MyOrganizer.dto.UserInfoDTO;
 import dev.renancmd.MyOrganizer.dto.ChangePasswordDTO;
 import dev.renancmd.MyOrganizer.dto.DeleteUserDTO;
 import dev.renancmd.MyOrganizer.dto.UpdateUserDTO;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +18,20 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public List<UserInfoDTO> getUser(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return userRepository.findByEmail(email)
+            .stream()
+            .map(data -> UserInfoDTO.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .build())
+            .toList();
+
+    }
 
     public void updateUser(String email, UpdateUserDTO dto) {
         var userOptional = userRepository.findByEmail(email);
