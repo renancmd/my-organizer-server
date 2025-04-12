@@ -18,7 +18,7 @@ import java.util.List;;
 public class UserController {
 
     private final UserService userService;
-
+    
     @GetMapping("/me")
     public ResponseEntity<List<UserInfoDTO>> showUserData(Authentication authentication) {
         String email = (String) authentication.getPrincipal();
@@ -28,25 +28,21 @@ public class UserController {
 
     @PutMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody UpdateUserDTO dto, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        String email = user.getEmail();
+        String email = (String) authentication.getPrincipal();
         userService.updateUser(email, dto);
-        return ResponseEntity.ok("User updated successfully");
+        return ResponseEntity.ok("Successfully updated user");
     }
 
     @PutMapping("/password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDTO dto, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        String email = user.getEmail();
+        String email = (String) authentication.getPrincipal();
         userService.changePassword(email, dto);
         return ResponseEntity.ok("Password changed successfully");
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestBody DeleteUserDTO dto, Authentication authentication) {
-        System.out.print("Req got it");
-        User user = (User) authentication.getPrincipal();
-        String email = user.getEmail();
+        String email = (String) authentication.getPrincipal();
         userService.deleteUser(email, dto);
         return ResponseEntity.ok("User deleted successfully");
     }
